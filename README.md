@@ -3,7 +3,7 @@
 > 계속해서 수정할 예정
 
 ```
-**Vite 실행**
+Vite 실행
 - 실행 : npm run dev
 - 클론 후 실행 : npm install => npm run dev
 ```
