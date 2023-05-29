@@ -5,6 +5,7 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
   const [editingId, setEditingId] = useState(null);
   const [updatedText, setUpdatedText] = useState('');
   const [inputText, setInputText] = useState('');
+  const [filter, setFilter] = useState('all');
 
   const handleDelete = id => {
     deleteTodo(id);
@@ -28,15 +29,17 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
       return;
     }
 
-    updateTodo({
-      id,
+    const updatedTodo = {
+      ...todos.find(todo => todo.id === id),
       text: updatedText.trim(),
-    });
+    };
 
+    updateTodo(updatedTodo);
     handleCancelEdit();
   };
 
   const handleInputChange = e => {
+    setInputText(e.target.value);
     setUpdatedText(e.target.value);
   };
 
@@ -50,13 +53,22 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
     updateTodo(updatedTodo);
   };
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  const handleFilterChange = filter => {
+    setFilter(filter);
+  };
+
+  const filteredTodos = filter === 'completed' ? todos.filter(todo => todo.completed) :
+    filter === 'active' ? todos.filter(todo => !todo.completed) : todos;
 
   return (
     <div>
+      <div>
+        <button onClick={() => handleFilterChange('all')}>All</button>
+        <button onClick={() => handleFilterChange('active')}>Active</button>
+        <button onClick={() => handleFilterChange('completed')}>Completed</button>
+      </div>
       <ul>
-        {activeTodos.map(todo => (
+        {filteredTodos.map(todo => (
           <li key={todo.id} className={editingId === todo.id ? 'editing' : ''}>
             {editingId === todo.id ? (
               <div>
@@ -87,7 +99,7 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
           </li>
         ))}
       </ul>
-      <CompletedTodos completedTodos={completedTodos} deleteTodo={deleteTodo} />
+      <CompletedTodos completedTodos={todos.filter(todo => todo.completed)} deleteTodo={deleteTodo} />
     </div>
   );
 };
