@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { push } from 'firebase/database';
+import database from '../firebase';
 
 const AddTodo = ({ addTodo }) => {
   const [text, setText] = useState('');
@@ -6,11 +8,17 @@ const AddTodo = ({ addTodo }) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (!text) return;
-    addTodo({
+
+    const newTodo = {
       id: Date.now(),
       text,
       completed: false
-    });
+    };
+
+    const todoRef = push(database.ref('todos'), newTodo);
+    newTodo.id = todoRef.key;
+
+    addTodo(newTodo);
     setText('');
   };
 

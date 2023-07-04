@@ -599,4 +599,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# 사용자
+.env
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,react,visualstudio,node

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import CompletedTodos from './CompletedTodos';
+import { saveTodos } from '../services/TodoService';
 
 const TodoList = ({ todos, updateTodo, deleteTodo }) => {
   const [editingId, setEditingId] = useState(null);
@@ -28,14 +29,19 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
       handleCancelEdit();
       return;
     }
-
+  
     const updatedTodo = {
       ...todos.find(todo => todo.id === id),
       text: updatedText.trim(),
     };
-
+  
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? updatedTodo : todo
+    );
+  
     updateTodo(updatedTodo);
     handleCancelEdit();
+    saveTodos(updatedTodos); // 수정된 todos를 저장합니다.
   };
 
   const handleInputChange = e => {
@@ -49,8 +55,13 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
       ...completedTodo,
       completed: true,
     };
-
+  
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? updatedTodo : todo
+    );
+  
     updateTodo(updatedTodo);
+    saveTodos(updatedTodos); // 수정된 todos를 저장합니다.
   };
 
   const handleFilterChange = filter => {

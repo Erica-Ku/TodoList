@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TodoList from '../components/TodoList';
 import AddTodo from '../components/AddTodo';
 import { getTodos, saveTodos } from '../services/TodoService';
 
 const TodoListContainer = () => {
-  const [todos, setTodos] = useState(getTodos());
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const todosFromDB = await getTodos();
+      setTodos(todosFromDB);
+    };
+
+    fetchTodos();
+  }, []);
 
   const addTodo = newTodo => {
     const updatedTodos = [...todos, newTodo];
