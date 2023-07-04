@@ -1,7 +1,5 @@
 # TodoList
-## TodoList - Vite를 사용함
 > 계속해서 수정할 예정
-> firebase realtime database 사용
 
 ```
 Vite 실행
