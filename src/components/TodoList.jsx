@@ -8,7 +8,7 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
   const [inputText, setInputText] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     deleteTodo(id);
   };
 
@@ -24,62 +24,68 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
     setInputText('');
   };
 
-  const handleUpdate = id => {
+  const handleUpdate = (id) => {
     if (updatedText.trim() === '') {
       handleCancelEdit();
       return;
     }
-  
+
     const updatedTodo = {
-      ...todos.find(todo => todo.id === id),
+      ...todos.find((todo) => todo.id === id),
       text: updatedText.trim(),
     };
-  
-    const updatedTodos = todos.map(todo =>
+
+    const updatedTodos = todos.map((todo) =>
       todo.id === id ? updatedTodo : todo
     );
-  
+
     updateTodo(updatedTodo);
     handleCancelEdit();
-    saveTodos(updatedTodos); // 수정된 todos를 저장합니다.
+    saveTodos(updatedTodos);
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setInputText(e.target.value);
     setUpdatedText(e.target.value);
   };
 
-  const handleComplete = id => {
-    const completedTodo = todos.find(todo => todo.id === id);
+  const handleComplete = (id) => {
+    const completedTodo = todos.find((todo) => todo.id === id);
     const updatedTodo = {
       ...completedTodo,
       completed: true,
     };
-  
-    const updatedTodos = todos.map(todo =>
+
+    const updatedTodos = todos.map((todo) =>
       todo.id === id ? updatedTodo : todo
     );
-  
+
     updateTodo(updatedTodo);
-    saveTodos(updatedTodos); // 수정된 todos를 저장합니다.
+    saveTodos(updatedTodos);
   };
 
-  const handleFilterChange = filter => {
+  const handleFilterChange = (filter) => {
     setFilter(filter);
   };
 
-  const filteredTodos = filter === 'completed' ? todos.filter(todo => todo.completed) :
-    filter === 'active' ? todos.filter(todo => !todo.completed) : todos;
+  const filteredTodos =
+    filter === 'completed'
+      ? todos.filter((todo) => todo.completed)
+      : filter === 'active'
+      ? todos.filter((todo) => !todo.completed)
+      : todos;
 
   return (
     <div>
       <div>
         <button onClick={() => handleFilterChange('all')}>All</button>
         <button onClick={() => handleFilterChange('active')}>Active</button>
-        <button onClick={() => handleFilterChange('completed')}>Completed</button>
+        <button onClick={() => handleFilterChange('completed')}>
+          Completed
+        </button>
       </div>
       <ul>
-        {filteredTodos.map(todo => (
+        {filteredTodos.map((todo) => (
           <li key={todo.id} className={editingId === todo.id ? 'editing' : ''}>
             {editingId === todo.id ? (
               <div>
@@ -94,6 +100,10 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
             ) : (
               <div>
                 <span>{todo.text}</span>
+                <span>{todo.category}</span>
+                <span>
+                  {todo.notification ? 'Notification Enabled' : 'Notification Disabled'}
+                </span>
                 {!todo.completed && (
                   <>
                     <button onClick={() => handleEdit(todo.id, todo.text)}>
@@ -110,7 +120,7 @@ const TodoList = ({ todos, updateTodo, deleteTodo }) => {
           </li>
         ))}
       </ul>
-      <CompletedTodos completedTodos={todos.filter(todo => todo.completed)} deleteTodo={deleteTodo} />
+      <CompletedTodos completedTodos={todos.filter((todo) => todo.completed)} deleteTodo={deleteTodo} />
     </div>
   );
 };
